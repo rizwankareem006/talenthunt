@@ -1,6 +1,9 @@
 {% extends 'Registration/base.html' %}
 {% block title %}Sign Up{% endblock %}
 {% block content %}
+{% if error %}
+    <h2>{{error}}</h2>
+{% endif %}
 <form action = "{% url 'Registration:SignUp' %}" method='POST'>
     {% csrf_token %}
     <label for='username'>Username </label>
