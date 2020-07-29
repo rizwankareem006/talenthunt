@@ -123,3 +123,7 @@ STATIC_URL = '/static/'
 """
 AUTH_USER_MODEL = 'Registration.MyUser'
 """
+
+AUTHENTICATION_BACKENDS = (
+        'django.contrib.auth.backends.ModelBackend',
+    )
