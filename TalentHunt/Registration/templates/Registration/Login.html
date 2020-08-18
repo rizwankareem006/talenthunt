@@ -1,19 +1,69 @@
-{% extends 'Registration/base.html' %}
-{% block title %}Login{% endblock %}
-{% block content %}
-{% if error %}
-<h2>{{error}}</h2>
-{% endif %}
-<form action="{% url 'Registration:Login' %}" method="POST">
-    {% csrf_token %}
-    <label for='username'>Username </label>
-    <input type='text' name='username' id='username'><br>
-    <label for='password'>Password </label>
-    <input type='password' name='password' id='password'><br>
-    <button type='submit'>Login</button>
-</form>
-<form action="{% url 'Registration:SignUp' %}" method='GET'>
-    <label>Don't have an account? </label>
-    <button type='submit'>Sign Up</button>
-</form>
-{% endblock %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="icon" type="image/x-icon" href="{% static 'Registration/Images/TH.png' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'Registration\background.css' %}">
+</head>
+<body>
+<div class = "bg" >
+    <div class = "row justify-content-center h-100 row align-items-center">
+        <div class = "col-3 text-center">
+            {% if error %}
+            <span class="alert alert-danger">{{error}}</span>
+            <br>
+            <br>
+            {% endif %}
+            <div class = "card-transparent" style="background-color: rgba(4, 4, 4, 0.5);">
+                <div class = "card-header" style="opacity: 1;">
+                    <img src="{% static 'Registration/Images/TH.png' %}" alt="TH Logo" width=30%>
+                </div>
+                <div class="card-body" >
+                    <form action="{% url 'Registration:Login' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="fas fa-user">
+                                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-person-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                                        </svg>
+                                    </i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control" placeholder="Username" name="username">
+                        </div>
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="fas fa-key">
+                                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-key-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M3.5 11.5a3.5 3.5 0 1 1 3.163-5H14L15.5 8 14 9.5l-1-1-1 1-1-1-1 1-1-1-1 1H6.663a3.5 3.5 0 0 1-3.163 2zM2.5 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+                                        </svg>
+                                    </i>
+                                </span>
+                            </div>
+                            <input type="password" class="form-control" placeholder="Password" name="password">
+                        </div>
+                        <button type='submit' class='btn btn-primary btn-lg'>Login</button>
+                    </form>
+                </div>
+                <div class = "card-footer">
+                    <form action="{% url 'Registration:SignUp' %}" method='GET'>
+                        <label>Don't have an account? </label>
+                        <button type='submit' class='btn btn-primary'>Sign Up</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

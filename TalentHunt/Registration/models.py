@@ -5,8 +5,8 @@ from django.dispatch import receiver
 # Create your models here.
 class ExtUser(models.Model):
     username = models.OneToOneField(User, on_delete=models.CASCADE)
-    gender = models.CharField(max_length = 20, blank=True)
-    mobile = models.IntegerField(blank=True)
-    dob = models.DateField(blank = True)
-    category = models.CharField(max_length = 20, blank=True)
+    gender = models.CharField(max_length = 20, blank=False)
+    mobile = models.IntegerField(blank=False)
+    dob = models.DateField(blank = False)
+    category = models.CharField(max_length = 20, blank=False)
 
