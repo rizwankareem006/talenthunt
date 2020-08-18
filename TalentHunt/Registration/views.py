@@ -25,11 +25,9 @@ def loginpage(request):
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(username = username, password = password)
-        """print(request.POST['username'], request.POST['password'])
-        print(user)"""
         if user is not None:
             login(request,user)
-            return render(request,'Registration/base.html')
+            return redirect('Details:Skills')
         else:
             context = {'error':'Incorrect username or password!'}
     else:
