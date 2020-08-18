@@ -128,3 +128,6 @@ AUTH_USER_MODEL = 'Registration.MyUser'
 AUTHENTICATION_BACKENDS = (
         'django.contrib.auth.backends.ModelBackend',
     )
+
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
