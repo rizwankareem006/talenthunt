@@ -1,0 +1,32 @@
+{% extends 'Details/base.html' %}
+{% load static %}
+{% block title %}Feed{% endblock %}
+{% block header%}
+{% endblock %}
+{% block content %}
+<h1>Welcome {{request.user}},</h1>
+<form action="{% url 'Details:Logout' %}" method = "POST">
+    {% csrf_token %}
+    <button type="submit">Sign Out</button>
+</form>
+{% for item in carddet %}
+<div class="card">
+    <div class="card-header">
+        {{ item.fullname }}
+    </div>
+    <div class="card-body">
+        <ul>
+            {% for i in item.skillset %}
+                <li>{{ i.description }}</li>
+            {% endfor %}
+        </ul>
+        {{ item.workexpec }}
+        {{ item.rating }}
+    </div>
+</div>
+{% endfor %}
+<ul class="pagination">
+    <li class="page-item"><a class="page-link" href="{% url 'Details:Feed' page=page_number.previousPage %}">Previous</a></li>
+    <li class="page-item"><a class="page-link" href="{% url 'Details:Feed' page=page_number.nextPage %}">Next</a></li>
+</ul>
+{% endblock %}

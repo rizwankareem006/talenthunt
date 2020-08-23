@@ -3,5 +3,6 @@ from . import views
 app_name = "Details"
 urlpatterns = [
     path('logout/', views.signout, name="Logout"),
-    path('skills/', views.skills, name="Skills"),
+    path('indiskills/', views.indiskills, name="IndividualSkills"),
+    path('feed/<int:page>/', views.feed, name="Feed"),
 ]
