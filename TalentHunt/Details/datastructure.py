@@ -24,12 +24,11 @@ class ProfileDetails:
         self.firstname = user.first_name
         self.lastname = user.last_name
         self.email = user.email
-        self.gender = user.extuser.gender
         self.mobile = user.extuser.mobile
         self.gender = user.extuser.gender
-        self.dob = user.extuser.dob
+        self.dob = str(user.extuser.dob)
         self.category = user.extuser.category
-        self.skillset = user.individualskills.skillset.all()
+        self.skillset = list(user.individualskills.skillset.all())
         self.specialization = user.individualskills.specialization
         self.pastexp = user.individualskills.pastexp
         self.workexpec = user.individualskills.workexpec

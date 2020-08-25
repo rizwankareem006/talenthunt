@@ -4,7 +4,8 @@ from django.contrib.auth.decorators import login_required
 from .models import IndividualSkills
 from django.contrib.auth.models import User
 from django.http import JsonResponse
-from .datastructure import CardDetails, PageNumber
+from .datastructure import CardDetails, PageNumber, ProfileDetails
+
 # Create your views here.
 def signout(request):
     logout(request)
@@ -51,9 +52,11 @@ def feed(request,page=1):
     """return render(request,'Details/feed.html')"""
 
 @login_required
-def profile(request):
+def profile(request,username):
     if request.method == "POST":
         pass
     else:
-        context = {}
+        user = User.objects.get(username = request.user)
+        pd = ProfileDetails(user)
+        context = {'pd':pd}
         return render(request,'Details/profile.html', context=context)
