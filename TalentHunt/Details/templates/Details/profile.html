@@ -4,6 +4,47 @@
 {% block header %}
     <link rel="stylesheet" type="text/css" href="{% static 'Details/indiskills.css' %}">
     <script type="text/javascript" src="{% static 'Details/indiskills.js' %}"></script>
+    <script>
+        $(function(){
+            $("#update").click(function(){
+                var arr = [];
+                var len = $(".chip").length;
+                for (var i = 0; i <len ; i++){
+                    arr.push($(".tokenValues").eq(i).text());
+                }
+                $.ajax({
+                    type:"POST",
+                    url:"{% url 'Details:ProfileUpdate' username=request.user %}",
+                    data:{
+                        'csrfmiddlewaretoken': "{{csrf_token}}",
+                        'username': $("#username").val(),
+                        'firstname': $("#firstname").val(),
+                        'lastname': $("#lastname").val(),
+                        'email': $("#email").val(),
+                        'gender': $('input[name="gender"]:checked').val(),
+                        'mobile': $("#mobile").val(),
+                        'dob': $("#dob").val(),
+                        'category': $("#category").val(),
+                        'skillset':arr,
+                        'specialization': $("#specialization").val(),
+                        'pastexp': $("#pastexp").val(),
+                        'workexpec': $("#workexpec").val(),
+                        'bio': $("#bio").val(),
+                        'rating': $("#rating").val()
+                    },
+                    success:function(response){
+                        if (response.status == 0){
+                            $("#status").append("<div class=\"alert alert-success\">Profile Updated <strong>Successfully!</strong></div>");
+                        }
+                        else{
+                            $("#status").append("<div class=\"alert alert-danger\"><strong>Profile Updated Successfully!</strong></div>");
+                        }
+                    },
+                    dataType: 'json'
+                });
+            }); 
+        });
+    </script>
 {% endblock %}
 {% block content %}
 <h1>{{request.user}}</h1>
@@ -11,7 +52,11 @@
     {% csrf_token %}
     <button type="submit">Sign Out</button>
 </form>
+<div id="status">
+
+</div>
 <form>
+    {% csrf_token %}
     <label for="username">Username:</label>
     <input type="text" id="username" value={{pd.username}} disabled>
     <label for="firstname">First Name:</label>
@@ -21,9 +66,9 @@
     <label for="email">First Name:</label>
     <input type="email" id="email" value={{pd.email}}>
     <label>Gender</label>
-    <input type="radio" id="male" {% if pd.gender == 'Male' %}checked{% endif %}>
+    <input type="radio" name="gender" id="male" value="Male" {% if pd.gender == 'Male' %}checked{% endif %}>
     <label for="male">Male</label>
-    <input type="radio" id="female" {% if pd.gender == 'Female' %}checked{% endif %}>
+    <input type="radio" name="gender" id="female" value="Female" {% if pd.gender == 'Female' %}checked{% endif %}>
     <label for="female">Female</label>
     <label for="mobile">Mobile:</label>
     <input type="number" id="mobile" value="{{pd.mobile}}">
@@ -50,13 +95,16 @@
             </div>     
         {% endfor %}
     </div>
-    <label for="Specialization">Specialization:</label>
-    <textarea>{{pd.specialization}}</textarea>
+    <label for="specialization">Specialization:</label>
+    <textarea id="specialization">{{pd.specialization}}</textarea>
     <label for="pastexp">Past Experiences:</label>
-    <textarea>{{pd.pastexp}}</textarea>
+    <textarea id="pastexp">{{pd.pastexp}}</textarea>
     <label for="workexpec">Work Experiences:</label>
-    <textarea>{{pd.workexpec}}</textarea>
+    <textarea id="workexpec">{{pd.workexpec}}</textarea>
+    <label for="bio">Bio:</label>
+    <textarea id="bio">{{pd.bio}}</textarea>
     <label for="rating">Rating:</label>
     <input type="number" id="rating" value="{{pd.rating}}">
+    <button type="button" id="update">Update</button>
 </form>
 {% endblock %}

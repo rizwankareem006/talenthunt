@@ -32,6 +32,7 @@ class ProfileDetails:
         self.specialization = user.individualskills.specialization
         self.pastexp = user.individualskills.pastexp
         self.workexpec = user.individualskills.workexpec
+        self.bio = user.individualskills.bio
         self.rating = user.individualskills.rating
     
 

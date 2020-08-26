@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from .models import IndividualSkills
+from .models import IndividualSkills, IndividualSkillSet
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from .datastructure import CardDetails, PageNumber, ProfileDetails
@@ -60,3 +60,33 @@ def profile(request,username):
         pd = ProfileDetails(user)
         context = {'pd':pd}
         return render(request,'Details/profile.html', context=context)
+
+@login_required
+def profileupdate(request, username):
+    user = User.objects.get(username = request.user)
+    if request.method == "POST":
+        if user.groups.filter(name="IndividualTalent").exists():
+            user.first_name = request.POST['firstname']
+            user.last_name = request.POST['lastname']
+            user.email = request.POST['email']
+            user.extuser.gender = request.POST['gender']
+            user.extuser.mobile = request.POST['mobile']
+            user.extuser.dob = request.POST['dob']
+            li = request.POST.getlist('skillset[]')
+            indiskills = IndividualSkills.objects.get(user=user)
+            indiskills.skillset.all().delete()
+            for i in li:
+                item = IndividualSkillSet.objects.create(indiskills = indiskills, description=i)
+                item.save()
+            user.individualskills.specialization = request.POST['specialization']
+            user.individualskills.pastexp = request.POST['pastexp']
+            user.individualskills.workexpec = request.POST['workexpec']
+            user.individualskills.bio = request.POST['bio']
+            user.individualskills.save()
+            user.extuser.save()
+            user.save()
+            response = {
+                'status':0,
+                'message':"Profile Updated Successfully!"
+            }
+            return JsonResponse(response)
