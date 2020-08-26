@@ -39,7 +39,6 @@
             for(var i = 0; i < len; i++){
                 arr.push($(".tokenValues").eq(i).text());
             }
-            $("#skillset").val(arr);
             $.ajax({
                 type:"POST",
                 url:"{% url 'Details:IndividualSkills' %}",
@@ -51,7 +50,6 @@
                     'bio': $("#bio").val(),
                 },
                 success: function(response){
-                    alert(response.status)
                     if (response.status == 0){
                         window.location = "{% url 'Details:Feed' page=1 %}";
                     }
@@ -91,7 +89,6 @@
     <textarea id="workexpec" name="workexpec"></textarea>
     <label for="bio">Bio</label>
     <textarea id="bio" name="bio"></textarea>
-    <input type="text" name="skillset" id="skillset" value="Hidden">
     <button type="button" id="sub">Submit</button>
 </form>
 {% endblock %}

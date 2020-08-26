@@ -2,6 +2,49 @@
 {% load static %}
 {% block title %}Profile{% endblock %}
 {% block header %}
+    <link rel="stylesheet" type="text/css" href="{% static 'Details/indiskills.css' %}">
+    <script type="text/javascript" src="{% static 'Details/indiskills.js' %}"></script>
+    <script>
+        $(function(){
+            $("#update").click(function(){
+                var arr = [];
+                var len = $(".chip").length;
+                for (var i = 0; i <len ; i++){
+                    arr.push($(".tokenValues").eq(i).text());
+                }
+                $.ajax({
+                    type:"POST",
+                    url:"{% url 'Details:ProfileUpdate' username=request.user %}",
+                    data:{
+                        'csrfmiddlewaretoken': "{{csrf_token}}",
+                        'username': $("#username").val(),
+                        'firstname': $("#firstname").val(),
+                        'lastname': $("#lastname").val(),
+                        'email': $("#email").val(),
+                        'gender': $('input[name="gender"]:checked').val(),
+                        'mobile': $("#mobile").val(),
+                        'dob': $("#dob").val(),
+                        'category': $("#category").val(),
+                        'skillset':arr,
+                        'specialization': $("#specialization").val(),
+                        'pastexp': $("#pastexp").val(),
+                        'workexpec': $("#workexpec").val(),
+                        'bio': $("#bio").val(),
+                        'rating': $("#rating").val()
+                    },
+                    success:function(response){
+                        if (response.status == 0){
+                            $("#status").append("<div class=\"alert alert-success\">Profile Updated <strong>Successfully!</strong></div>");
+                        }
+                        else{
+                            $("#status").append("<div class=\"alert alert-danger\"><strong>Profile Updated Successfully!</strong></div>");
+                        }
+                    },
+                    dataType: 'json'
+                });
+            }); 
+        });
+    </script>
 {% endblock %}
 {% block content %}
 <h1>{{request.user}}</h1>
@@ -9,10 +52,59 @@
     {% csrf_token %}
     <button type="submit">Sign Out</button>
 </form>
+<div id="status">
+
+</div>
 <form>
+    {% csrf_token %}
     <label for="username">Username:</label>
-    <input type="text" id="username" value={{}}>
+    <input type="text" id="username" value={{pd.username}} disabled>
     <label for="firstname">First Name:</label>
-    <input type="text" id="firstname" value={{}}>
+    <input type="text" id="firstname" value={{pd.firstname}}>
+    <label for="lastname">Last Name:</label>
+    <input type="text" id="lastname" value={{pd.lastname}}>
+    <label for="email">First Name:</label>
+    <input type="email" id="email" value={{pd.email}}>
+    <label>Gender</label>
+    <input type="radio" name="gender" id="male" value="Male" {% if pd.gender == 'Male' %}checked{% endif %}>
+    <label for="male">Male</label>
+    <input type="radio" name="gender" id="female" value="Female" {% if pd.gender == 'Female' %}checked{% endif %}>
+    <label for="female">Female</label>
+    <label for="mobile">Mobile:</label>
+    <input type="number" id="mobile" value="{{pd.mobile}}">
+    <label for="dob">Date of Birth:</label>
+    <input type="date" id="dob" value="{{pd.dob}}">
+    <label for="category">Category:</label>
+    <input type="text" id="category" value="{{pd.category}}" disabled>
+    <div class="input-group">
+        <input type="text" id="chipValue" class="form-control" placeholder="Add">
+        <div class="input-group-btn">
+            <button type="button" class="btn btn-outline-primary" id="addToken">
+                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-plus" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M8 3.5a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5H4a.5.5 0 0 1 0-1h3.5V4a.5.5 0 0 1 .5-.5z"/>
+                    <path fill-rule="evenodd" d="M7.5 8a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0V8z"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+    <div id="tokens">
+        {% for item in pd.skillset %}
+            <div class="chip">
+                <span class="tokenValues">{{item.description}}</span>
+                <span class="closebtn" onclick="$($(this).parent()).remove();">&times;</span>
+            </div>     
+        {% endfor %}
+    </div>
+    <label for="specialization">Specialization:</label>
+    <textarea id="specialization">{{pd.specialization}}</textarea>
+    <label for="pastexp">Past Experiences:</label>
+    <textarea id="pastexp">{{pd.pastexp}}</textarea>
+    <label for="workexpec">Work Experiences:</label>
+    <textarea id="workexpec">{{pd.workexpec}}</textarea>
+    <label for="bio">Bio:</label>
+    <textarea id="bio">{{pd.bio}}</textarea>
+    <label for="rating">Rating:</label>
+    <input type="number" id="rating" value="{{pd.rating}}">
+    <button type="button" id="update">Update</button>
 </form>
 {% endblock %}

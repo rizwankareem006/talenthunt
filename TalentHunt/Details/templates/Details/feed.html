@@ -5,6 +5,9 @@
 {% endblock %}
 {% block content %}
 <h1>Welcome {{request.user}},</h1>
+<form action="{% url 'Details:Profile' username=request.user %}" method="GET">
+    <button type="submit">Profile</button>
+</form>
 <form action="{% url 'Details:Logout' %}" method = "POST">
     {% csrf_token %}
     <button type="submit">Sign Out</button>
