@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 # Create your models here.
-class IndividualSkills(models.Model):
+class Skills(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     specialization = models.TextField()
     pastexp = models.TextField()
@@ -9,11 +9,37 @@ class IndividualSkills(models.Model):
     bio = models.TextField()
     rating = models.IntegerField(default=0)
 
-class IndividualSkillSet(models.Model):
-    indiskills = models.ForeignKey(
-        IndividualSkills,
+class SkillSet(models.Model):
+    skills = models.ForeignKey(
+        Skills,
         on_delete= models.CASCADE,
         related_name= 'skillset'
     )
     description = models.CharField(max_length=50)
     
+class Teams(models.Model):
+    teamname = models.CharField(max_length = 50)
+    teamdescription = models.TextField()
+    def __str__(self):
+        return self.teamname
+    
+    def addMember(self,user):
+        self.members.create(self, user)
+        self.members.save()
+
+    def removeMember(self,user):
+        self.members.filter(team=self, user=user)[0].delete()
+        if self.members.all().length == 0:
+            self.delete()
+    
+class TeamMembers(models.Model):
+    team = models.ForeignKey(
+        Teams,
+        on_delete= models.CASCADE,
+        related_name= "members"
+    )
+    user = models.ForeignKey(
+        User,
+        on_delete= models.CASCADE,
+        related_name= "users"
+    )

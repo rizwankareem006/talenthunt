@@ -2,38 +2,11 @@
 {% load static %}
 {% block title %}Skills Details{% endblock %}
 {% block header %}
-<link rel="stylesheet" type="text/css" href="{% static 'Details/indiskills.css' %}">
-<script type="text/javascript" src="{% static 'Details/indiskills.js' %}"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'Details/skills.css' %}">
+<script type="text/javascript" src="{% static 'Details/skills.js' %}"></script>
 <script>
     $(function(){
         $("#sub").click(function(){
-            function getCookie(name) {
-                var cookieValue = null;
-                if (document.cookie && document.cookie != '') {
-                    var cookies = document.cookie.split(';');
-                    for (var i = 0; i < cookies.length; i++) {
-                        var cookie = jQuery.trim(cookies[i]);
-                        // Does this cookie string begin with the name we want?
-                        if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                            break;
-                        }
-                    }
-                }
-                return cookieValue;
-            }
-            var csrftoken = getCookie('csrftoken');
-            function csrfSafeMethod(method) {
-                // these HTTP methods do not require CSRF protection
-                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-            }
-            $.ajaxSetup({
-                beforeSend: function(xhr, settings) {
-                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                    }
-                }
-            });
             var len = $(".tokenValues").length;
             var arr = [];
             for(var i = 0; i < len; i++){
@@ -41,8 +14,9 @@
             }
             $.ajax({
                 type:"POST",
-                url:"{% url 'Details:IndividualSkills' %}",
+                url:"{% url 'Details:Skills' %}",
                 data:{
+                    'csrfmiddlewaretoken':"{{csrf_token}}",
                     'skillset': arr,
                     'specialization': $("#specialization").val(),
                     'pastexp': $("#pastexp").val(),

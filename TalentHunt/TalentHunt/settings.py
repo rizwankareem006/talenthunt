@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'rkjlwmky(vrqj3f$c(uhlb+n^1(kb778q_nj-c28o=v7yy@rl7'
+SECRET_KEY = 'j$9ota3ox)s!@kiwzt5+(x8zzr=bkoeqhp1h%^^&w^(mpbxzc*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -120,14 +120,3 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-
-"""
-AUTH_USER_MODEL = 'Registration.MyUser'
-"""
-
-AUTHENTICATION_BACKENDS = (
-        'django.contrib.auth.backends.ModelBackend',
-    )
-
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
-

@@ -6,4 +6,4 @@ app_name = "Registration"
 urlpatterns = [
     path('signup/', views.signup, name="SignUp"),
     path('',views.loginpage, name="Login")
-]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+]
