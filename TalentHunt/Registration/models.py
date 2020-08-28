@@ -8,5 +8,5 @@ class ExtUser(models.Model):
     gender = models.CharField(max_length = 20, blank=False)
     mobile = models.IntegerField(blank=False)
     dob = models.DateField(blank = False)
-    category = models.CharField(max_length = 20, blank=False)
+
 

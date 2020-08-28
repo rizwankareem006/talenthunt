@@ -1,10 +1,10 @@
 class CardDetails:
-    def __init__(self, username, fullname, skillset, workexpec, rating):
-        self.username = username
-        self.fullname = fullname
-        self.skillset = skillset
-        self.workexpec = workexpec
-        self.rating = rating
+    def __init__(self, user, sks, skset):
+        self.username = user.username
+        self.fullname = user.get_full_name()
+        self.skillset = list(skset)
+        self.workexpec = sks.workexpec
+        self.rating = sks.rating
     
 class PageNumber:
     def __init__(self, currentPage):
@@ -27,12 +27,11 @@ class ProfileDetails:
         self.mobile = user.extuser.mobile
         self.gender = user.extuser.gender
         self.dob = str(user.extuser.dob)
-        self.category = user.extuser.category
-        self.skillset = list(user.individualskills.skillset.all())
-        self.specialization = user.individualskills.specialization
-        self.pastexp = user.individualskills.pastexp
-        self.workexpec = user.individualskills.workexpec
-        self.bio = user.individualskills.bio
-        self.rating = user.individualskills.rating
+        self.skillset = list(user.skills.skillset.all())
+        self.specialization = user.skills.specialization
+        self.pastexp = user.skills.pastexp
+        self.workexpec = user.skills.workexpec
+        self.bio = user.skills.bio
+        self.rating = user.skills.rating
     
 

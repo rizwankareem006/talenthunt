@@ -1,2 +1,0 @@
-# talenthunt
-Talent Hunt project
