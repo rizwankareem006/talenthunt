@@ -13,20 +13,22 @@
     <button type="submit">Sign Out</button>
 </form>
 {% for item in carddet %}
-<div class="card">
-    <div class="card-header">
-        {{ item.fullname }}
-    </div>
-    <div class="card-body">
-        <ul>
-            {% for i in item.skillset %}
-                <li>{{ i.description }}</li>
-            {% endfor %}
-        </ul>
-        {{ item.workexpec }}
-        {{ item.rating }}
-    </div>
-</div>
+    <a href = "{% url 'Details:Profile' username=item.username %}">
+        <button class="card">
+            <div class="card-header">
+                {{ item.fullname }}
+            </div>
+            <div class="card-body">
+                <ul>
+                    {% for i in item.skillset %}
+                        <li>{{ i.description }}</li>
+                    {% endfor %}
+                </ul>
+                {{ item.workexpec }}
+                {{ item.rating }}
+            </div>
+        </button>
+    </a>
 {% endfor %}
 <ul class="pagination">
     <li class="page-item"><a class="page-link" href="{% url 'Details:Feed' page=page_number.previousPage %}">Previous</a></li>

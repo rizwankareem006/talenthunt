@@ -1,0 +1,18 @@
+{% extends 'Details/base.html' %}
+{% load static %}
+{% block title %}{{tp.teamname}}{% endblock %}
+{% block header %}
+{% endblock %}
+{% block content %}
+<h1>{{tp.teamname}}</h1>
+<form action="{% url 'Details:TeamProfileUpdate' team=tp.primary_key %}" method="POST">
+    {% csrf_token %}
+    <label for="teamdescription">Team Description:</label>
+    <textarea id="teamdescription" name="teamdescription" {% if not owner %}disabled{% endif %} required>{{tp.teamdescription}}</textarea>
+    <label for="teammotive">Team Motive:</label>
+    <textarea id="teammotive" name="teammotive" {% if not owner %}disabled{% endif %} required>{{tp.teammotive}}</textarea>
+    {% if owner %}
+        <button type="submit">Update</button>
+    {% endif %}
+</form>
+{% endblock %}

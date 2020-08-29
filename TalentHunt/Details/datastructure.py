@@ -34,4 +34,11 @@ class ProfileDetails:
         self.bio = user.skills.bio
         self.rating = user.skills.rating
     
-
+class TeamProfile:
+    def __init__(self, team):
+        self.primary_key = team.pk
+        self.teamname = team.teamname
+        self.teamdescription = team.teamdesc.teamdescription
+        self.teammotive = team.teamdesc.teammotive
+        self.teammembers = list(team.members.all())
+        
