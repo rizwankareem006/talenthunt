@@ -19,7 +19,6 @@ class SkillSet(models.Model):
     
 class Teams(models.Model):
     teamname = models.CharField(max_length = 50)
-    teamdescription = models.TextField()
     def __str__(self):
         return self.teamname
     
@@ -43,3 +42,12 @@ class TeamMembers(models.Model):
         on_delete= models.CASCADE,
         related_name= "users"
     )
+
+class TeamDesc(models.Model):
+    team = models.OneToOneField(
+        Teams,
+        on_delete= models.CASCADE
+    )
+    teamdescription = models.TextField()
+    teammotive = models.TextField()
+    
