@@ -17,20 +17,21 @@ class SkillSet(models.Model):
     )
     description = models.CharField(max_length=50)
     
+class TeamsManager(models.Manager):
+    def addMember(self,team,user):
+        team.members.create(team=team, user=user)
+        team.save()
+
+    def removeMember(self,team,user):
+        team.members.filter(team=team, user=user)[0].delete()
+        if team.members.all().length == 0:
+            team.delete()
 class Teams(models.Model):
     teamname = models.CharField(max_length = 50)
     def __str__(self):
         return self.teamname
-    
-    def addMember(self,user):
-        self.members.create(self, user)
-        self.members.save()
+    objects = TeamsManager()
 
-    def removeMember(self,user):
-        self.members.filter(team=self, user=user)[0].delete()
-        if self.members.all().length == 0:
-            self.delete()
-    
 class TeamMembers(models.Model):
     team = models.ForeignKey(
         Teams,
@@ -51,3 +52,26 @@ class TeamDesc(models.Model):
     teamdescription = models.TextField()
     teammotive = models.TextField()
     
+class UserRequests(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='uruser'
+    )
+    team = models.ForeignKey(
+        Teams,
+        on_delete=models.CASCADE,
+        related_name='urteam'
+    )
+
+class TeamRequests(models.Model):
+    team = models.ForeignKey(
+        Teams,
+        on_delete=models.CASCADE,
+        related_name='trteam'
+    )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='truser'
+    )

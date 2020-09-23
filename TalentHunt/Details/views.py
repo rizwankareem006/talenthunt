@@ -1,10 +1,10 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from .models import Skills, SkillSet, Teams, TeamDesc, TeamMembers
+from .models import Skills, SkillSet, Teams, TeamDesc, TeamMembers, UserRequests, TeamRequests
 from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponseNotFound
-from .datastructure import CardDetails, PageNumber, ProfileDetails, TeamProfile
+from .datastructure import CardDetails, PageNumber, ProfileDetails, TeamProfile, ProfileTeamList, TeamProfileList, ProfileRequests, TeamRequests
 
 # Create your views here.
 def signout(request):
@@ -52,12 +52,16 @@ def profile(request,username):
     if str(request.user) == username:
         user = User.objects.get(username = request.user)
         pd = ProfileDetails(user)
-        context = {'pd':pd, 'owner':True}
-        print(context)
+        teams = TeamMembers.objects.filter(user=user)
+        td = ProfileTeamList(teams)
+        reqs = ProfileRequests(user)
+        context = {'pd':pd,'td':td,'reqs':reqs,'owner':True}
     else:
         user = User.objects.get(username = username)
         pd = ProfileDetails(user)
-        context = {'pd':pd, 'owner':False}
+        teams = TeamMembers.objects.filter(user=user)
+        td = ProfileTeamList(teams)
+        context = {'pd':pd, 'td':td,'owner':False}
     return render(request,'Details/profile.html', context=context)
 
 @login_required
@@ -92,6 +96,7 @@ def profileupdate(request, username):
 @login_required
 def createteam(request):
     if request.method == "POST":
+        user = User.objects.get(username=request.user)
         teamname = str(request.POST['teamname']).strip()
         teamdescription = str(request.POST['teamdescription']).strip()
         teammotive = str(request.POST['teammotive']).strip()
@@ -107,6 +112,7 @@ def createteam(request):
         else:
             team = Teams.objects.create(teamname = teamname)
             teamdesc = TeamDesc.objects.create(team=team, teamdescription=teamdescription, teammotive=teammotive)
+            Teams.objects.addMember(team,user)
             teamdesc.save()
             team.save()
             return redirect('Details:TeamProfile', team=team.pk)
@@ -118,30 +124,69 @@ def createteam(request):
 def teamprofile(request, team):
     user = User.objects.get(username = request.user)
     teamitem = Teams.objects.filter(pk=team)
+    context={}
     if not teamitem.exists():
         return HttpResponseNotFound('<h3>Page not found</h3>')
     else:
-        owner = teamitem.members.filter(user = user).exists()
-        tp = TeamProfile(teamitem)
-        context = {'tp':tp, 'owner':owner}
+        if request.method == "POST":
+            teamdescription = str(request.POST['teamdescription']).strip()
+            teammotive = str(request.POST['teammotive']).strip()
+            if teamdescription == "":
+                error = "Team description cannot be empty!"
+                context.update({'message':error})
+            elif teammotive == "":
+                error = "Team motive cannot be empty!"
+                context.update({'message':error})
+            else:
+                ti = teamitem[0]
+                ti.teamdesc.teamdescription = teamdescription
+                ti.teamdesc.teammotive = teammotive
+                ti.teamdesc.save()
+                ti.save()
+                context['message']="Updated Successfully!"
+        owner = teamitem[0].members.filter(user = user).exists()
+        tp = TeamProfile(teamitem[0])
+        userlist = TeamMembers.objects.filter(team=teamitem[0])
+        mems = TeamProfileList(userlist)
+        reqs = TeamRequests(teamitem[0])
+        context.update({'tp':tp,'pd':mems,'owner':owner})
         return render(request, 'Details/teamprofile.html', context = context)
 
 @login_required
-def teamprofileupdate(request, team):
+def teamacceptrequest(request,team,user):
     if request.method == "POST":
-        teamitem = Teams.objects.get(pk=team)
-        teamdescription = str(request.POST['teamdescription']).strip()
-        teammotive = str(request.POST['teammotive']).strip()
-        if teamdescription == "":
-            error = "Team description cannot be empty!"
-            context = {'error':error}
-        elif teammotive == "":
-            error = "Team motive cannot be empty!"
-            context = {'error':error}
-        else:
-            teamitem.teamdesc.teamdescription = teamdescription
-            teamitem.teamdesc.teammotive = teammotive
-            teamitem.teamdesc.save()
-            teamitem.save()
-            {'success':"Updated Successfully!"}
-        return render(request, 'Details/teamprofile.html', context=context)
+        t = Teams.objects.get(pk=team)
+        u = User.objects.get(username=user)
+        tr = TeamRequests.objects.get(team=t, user=u)
+        tr.delete()
+        Teams.objects.addMember(t,u)
+        return redirect('Detials:TeamProfile', team=t.pk)
+
+@login_required
+def teamdeclinerequest(request,team,user):
+    if request.method == "POST":
+        t = Teams.objects.get(pk=team)
+        u = User.objects.get(username=user)
+        tr = TeamRequests.objects.get(team=t, user=u)
+        tr.delete()
+        return redirect('Detials:TeamProfile', team=t.pk)
+
+@login_required
+def useracceptrequest(request,user,team):
+    if request.method == "POST":
+        t = Teams.objects.get(pk=team)
+        u = User.objects.get(username=user)
+        ur = UserRequests.objects.get(user=u, team=t)
+        ur.delete()
+        Teams.objects.addMember(t,u)
+        return redirect('Detials:Profile', user=u.username)
+
+@login_required
+def userdeclinerequest(request,user,team):
+    if request.method == "POST":
+        t = Teams.objects.get(pk=team)
+        u = User.objects.get(username=user)
+        ur = UserRequests.objects.get(user=u, team=t)
+        ur.delete()
+        return redirect('Detials:Profile', user=u.username)
+

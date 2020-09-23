@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 class CardDetails:
     def __init__(self, user, sks, skset):
         self.username = user.username
@@ -42,3 +43,36 @@ class TeamProfile:
         self.teammotive = team.teamdesc.teammotive
         self.teammembers = list(team.members.all())
         
+class ProfileTeamList:
+    def __init__(self, teams):
+        self.primary_keys = []
+        self.teamname = []
+        for item in teams:
+            self.primary_keys.append(item.team.pk)
+            self.teamname.append(item.team.teamname)
+        
+class TeamProfileList:
+    def __init__(self,users):
+        self.usernames = []
+        self.fullnames = []
+        for item in users:
+            self.usernames.append(item.user.username)
+            self.fullnames.append(item.user.get_full_name())
+
+class ProfileRequests:
+    def __init__(self,user):
+        self.requests = []
+        self.primary_keys = []
+        teams = user.uruser.all()
+        for item in teams:
+            self.requests.append(item.team.teamname)
+            self.primary_keys.append(item.team.pk)
+
+class TeamRequests:
+    def __init__(self,team):
+        self.requests = []
+        self.usernames = []
+        users = team.trteam.all()
+        for item in users:
+            self.requests.append(item.user.get_full_name())
+            self.usernames.append(item.user.username)
