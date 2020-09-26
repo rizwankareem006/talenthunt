@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Skills, SkillSet, Teams, TeamDesc, TeamMembers, UserRequests, TeamRequests
 from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponseNotFound
-from .datastructure import CardDetails, PageNumber, ProfileDetails, TeamProfile, ProfileTeamList, TeamProfileList, ProfileRequests, TeamRequests
+from .datastructure import CardDetails, PageNumber, ProfileDetails, TeamProfile, ProfileTeamList, TeamProfileList, ProfileReqs, TeamReqs, ProfileSendRequest
 
 # Create your views here.
 def signout(request):
@@ -54,14 +54,15 @@ def profile(request,username):
         pd = ProfileDetails(user)
         teams = TeamMembers.objects.filter(user=user)
         td = ProfileTeamList(teams)
-        reqs = ProfileRequests(user)
+        reqs = ProfileReqs(user)
         context = {'pd':pd,'td':td,'reqs':reqs,'owner':True}
     else:
         user = User.objects.get(username = username)
         pd = ProfileDetails(user)
         teams = TeamMembers.objects.filter(user=user)
         td = ProfileTeamList(teams)
-        context = {'pd':pd, 'td':td,'owner':False}
+        reqs = ProfileSendRequest(str(request.user),username)
+        context = {'pd':pd, 'td':td,'reqs':reqs,'owner':False}
     return render(request,'Details/profile.html', context=context)
 
 @login_required
@@ -148,8 +149,9 @@ def teamprofile(request, team):
         tp = TeamProfile(teamitem[0])
         userlist = TeamMembers.objects.filter(team=teamitem[0])
         mems = TeamProfileList(userlist)
-        reqs = TeamRequests(teamitem[0])
-        context.update({'tp':tp,'pd':mems,'owner':owner})
+        reqs = TeamReqs(teamitem[0])
+        reqsent = TeamRequests.objects.filter(team=teamitem[0], user=user).exists()
+        context.update({'tp':tp,'pd':mems,'reqs':reqs,'owner':owner,'reqsent':reqsent})
         return render(request, 'Details/teamprofile.html', context = context)
 
 @login_required
@@ -160,7 +162,7 @@ def teamacceptrequest(request,team,user):
         tr = TeamRequests.objects.get(team=t, user=u)
         tr.delete()
         Teams.objects.addMember(t,u)
-        return redirect('Detials:TeamProfile', team=t.pk)
+        return redirect('Details:TeamProfile', team=t.pk)
 
 @login_required
 def teamdeclinerequest(request,team,user):
@@ -169,7 +171,7 @@ def teamdeclinerequest(request,team,user):
         u = User.objects.get(username=user)
         tr = TeamRequests.objects.get(team=t, user=u)
         tr.delete()
-        return redirect('Detials:TeamProfile', team=t.pk)
+        return redirect('Details:TeamProfile', team=t.pk)
 
 @login_required
 def useracceptrequest(request,user,team):
@@ -179,7 +181,7 @@ def useracceptrequest(request,user,team):
         ur = UserRequests.objects.get(user=u, team=t)
         ur.delete()
         Teams.objects.addMember(t,u)
-        return redirect('Detials:Profile', user=u.username)
+        return redirect('Details:Profile', username=u.username)
 
 @login_required
 def userdeclinerequest(request,user,team):
@@ -188,5 +190,22 @@ def userdeclinerequest(request,user,team):
         u = User.objects.get(username=user)
         ur = UserRequests.objects.get(user=u, team=t)
         ur.delete()
-        return redirect('Detials:Profile', user=u.username)
+        return redirect('Details:Profile', username=u.username)
 
+@login_required
+def usersendrequest(request,team,user):
+    if request.method == "POST":
+        t = Teams.objects.get(pk=team)
+        u = User.objects.get(username=user)
+        ur = UserRequests.objects.create(user=u, team=t)
+        ur.save()
+        return redirect('Details:Profile', username=u.username)
+
+@login_required
+def teamsendrequest(request,team):
+    if request.method == "POST":
+        u = User.objects.get(username=str(request.user))
+        t = Teams.objects.get(pk=team)
+        tr = TeamRequests.objects.create(team=t, user=u)
+        tr.save()
+        return redirect('Details:TeamProfile', team=t.pk)

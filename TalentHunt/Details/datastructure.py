@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from .models import TeamMembers, UserRequests, TeamRequests, Teams
 class CardDetails:
     def __init__(self, user, sks, skset):
         self.username = user.username
@@ -59,7 +60,7 @@ class TeamProfileList:
             self.usernames.append(item.user.username)
             self.fullnames.append(item.user.get_full_name())
 
-class ProfileRequests:
+class ProfileReqs:
     def __init__(self,user):
         self.requests = []
         self.primary_keys = []
@@ -68,7 +69,7 @@ class ProfileRequests:
             self.requests.append(item.team.teamname)
             self.primary_keys.append(item.team.pk)
 
-class TeamRequests:
+class TeamReqs:
     def __init__(self,team):
         self.requests = []
         self.usernames = []
@@ -76,3 +77,25 @@ class TeamRequests:
         for item in users:
             self.requests.append(item.user.get_full_name())
             self.usernames.append(item.user.username)
+
+class ProfileSendRequest:
+    def __init__(self,sendername,receivername):
+        sender = User.objects.get(username=sendername)
+        receiver = User.objects.get(username=receivername)
+        teamlist = set()
+        st = TeamMembers.objects.filter(user=sender)
+        for item in st:
+            teamlist.add(item.team.pk)
+        rt = TeamMembers.objects.filter(user=receiver)
+        for item in rt:
+            teamlist.discard(item.team.pk)
+        rr = UserRequests.objects.filter()
+        for item in rr:
+            teamlist.discard(item.team.pk)
+        self.primary_keys = list(teamlist)
+        self.teamnames = []
+        for item in self.primary_keys:
+            self.teamnames.append(Teams.objects.get(pk=item).teamname)
+
+
+        
