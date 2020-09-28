@@ -39,9 +39,10 @@ def feed(request,page=1):
         for i in range(start, min(len(skilldetails),end)):
             sks = skilldetails[i]
             uobj = User.objects.get(username = sks.user)
-            skset = list(sks.skillset.all())
-            cd = CardDetails(uobj,sks,skset)
-            carddet.append(cd)
+            if uobj.username != str(request.user):
+                skset = list(sks.skillset.all())
+                cd = CardDetails(uobj,sks,skset)
+                carddet.append(cd)
         nop = len(skilldetails)//10
         page_number = PageNumber(page)
         context = {'page_number':page_number, 'carddet':carddet, 'np':nop}
@@ -148,7 +149,7 @@ def teamprofile(request, team):
         owner = teamitem[0].members.filter(user = user).exists()
         tp = TeamProfile(teamitem[0])
         userlist = TeamMembers.objects.filter(team=teamitem[0])
-        mems = TeamProfileList(userlist)
+        mems = TeamProfileList(userlist,str(request.user))
         reqs = TeamReqs(teamitem[0])
         reqsent = TeamRequests.objects.filter(team=teamitem[0], user=user).exists()
         context.update({'tp':tp,'pd':mems,'reqs':reqs,'owner':owner,'reqsent':reqsent})
@@ -209,3 +210,30 @@ def teamsendrequest(request,team):
         tr = TeamRequests.objects.create(team=t, user=u)
         tr.save()
         return redirect('Details:TeamProfile', team=t.pk)
+
+@login_required
+def teammembersuccess(request,team,user):
+    if request.method == "POST":
+        u = User.objects.get(username=user)
+        t = Teams.objects.get(pk=team)
+        Teams.objects.removeMember(t,u)
+        u.skills.rating += 10
+        u.skills.save()
+        return redirect('Details:TeamProfile', team=t.pk)
+
+@login_required
+def teammemberfailure(request,team,user):
+    if request.method == "POST":
+        u = User.objects.get(username=user)
+        t = Teams.objects.get(pk=team)
+        Teams.objects.removeMember(t,u)
+        u.skills.rating -= 10
+        return redirect('Details:TeamProfile', team=t.pk)
+
+@login_required
+def resign(request,team,user):
+    if request.method == "POST":
+        u = User.objects.get(username=user)
+        t = Teams.objects.get(pk=team)
+        Teams.objects.removeMember(t,u)
+        return redirect('Details:Profile', username=u.username)

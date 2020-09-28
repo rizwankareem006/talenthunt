@@ -31,7 +31,7 @@
     </a>
 {% endfor %}
 <ul class="pagination">
-    <li class="page-item"><a class="page-link" href="{% url 'Details:Feed' page=page_number.previousPage %}">Previous</a></li>
+    {% if page_number.previousPage != 0 %}<li class="page-item"><a class="page-link" href="{% url 'Details:Feed' page=page_number.previousPage %}">Previous</a></li>{% endif %}
     <li class="page-item"><a class="page-link" href="{% url 'Details:Feed' page=page_number.nextPage %}">Next</a></li>
 </ul>
 {% endblock %}
