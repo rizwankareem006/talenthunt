@@ -4,13 +4,8 @@
 {% block header%}
 {% endblock %}
 {% block content %}
-<h1>Welcome {{request.user}},</h1>
 <form action="{% url 'Details:Profile' username=request.user %}" method="GET">
     <button type="submit">Profile</button>
-</form>
-<form action="{% url 'Details:Logout' %}" method = "POST">
-    {% csrf_token %}
-    <button type="submit">Sign Out</button>
 </form>
 {% for item in carddet %}
     <a href = "{% url 'Details:Profile' username=item.username %}">
@@ -31,7 +26,7 @@
     </a>
 {% endfor %}
 <ul class="pagination">
-    <li class="page-item"><a class="page-link" href="{% url 'Details:Feed' page=page_number.previousPage %}">Previous</a></li>
+    {% if page_number.previousPage != 0 %}<li class="page-item"><a class="page-link" href="{% url 'Details:Feed' page=page_number.previousPage %}">Previous</a></li>{% endif %}
     <li class="page-item"><a class="page-link" href="{% url 'Details:Feed' page=page_number.nextPage %}">Next</a></li>
 </ul>
 {% endblock %}

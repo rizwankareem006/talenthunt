@@ -53,12 +53,13 @@ class ProfileTeamList:
             self.teamname.append(item.team.teamname)
         
 class TeamProfileList:
-    def __init__(self,users):
+    def __init__(self,users,requser):
         self.usernames = []
         self.fullnames = []
         for item in users:
-            self.usernames.append(item.user.username)
-            self.fullnames.append(item.user.get_full_name())
+            if item.user.username != requser:
+                self.usernames.append(item.user.username)
+                self.fullnames.append(item.user.get_full_name())
 
 class ProfileReqs:
     def __init__(self,user):

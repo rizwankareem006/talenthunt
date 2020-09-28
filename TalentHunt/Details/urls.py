@@ -15,4 +15,7 @@ urlpatterns = [
     path('userdeclinerequest/<str:user>/<int:team>', views.userdeclinerequest, name="UserDeclineRequest"),
     path('usersendrequest/<int:team>/<str:user>/', views.usersendrequest, name="UserSendRequest"),
     path('teamsendrequest/<int:team>/',views.teamsendrequest, name="TeamSendRequest"),
+    path('teammembersuccess/<int:team>/<str:user>/', views.teammembersuccess, name="TeamMemberSuccess"),
+    path('teammemberfailure/<int:team>/<str:user>/', views.teammemberfailure, name="TeamMemberFailure"),
+    path('resign/<int:team>/<str:user>/', views.resign, name="Resign"),
 ]

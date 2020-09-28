@@ -24,7 +24,7 @@ class TeamsManager(models.Manager):
 
     def removeMember(self,team,user):
         team.members.filter(team=team, user=user)[0].delete()
-        if team.members.all().length == 0:
+        if len(team.members.all()) == 0:
             team.delete()
 class Teams(models.Model):
     teamname = models.CharField(max_length = 50)
