@@ -35,11 +35,6 @@
 </script>
 {% endblock %}
 {% block content %}
-<form action="{% url 'Details:Logout' %}" method = "POST">
-    {% csrf_token %}
-    <button type="submit">Sign Out</button>
-</form>
-<h2>Welcome {{request.user}},</h2>
 <form>
     {% csrf_token %}
     <div class="input-group">

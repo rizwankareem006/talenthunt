@@ -15,6 +15,11 @@
     {% endblock %}
 </head>
 <body>
+    <a href = "{% url 'Details:Feed' page=1 %}"><h2>{{request.user}}</h2></a>
+    <form action="{% url 'Details:Logout' %}" method = "POST">
+        {% csrf_token %}
+        <button type="submit">Sign Out</button>
+    </form>
     {% block content %}
     
     {% endblock %}
