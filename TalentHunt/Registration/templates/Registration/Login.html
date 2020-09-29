@@ -1,22 +1,23 @@
 {% extends 'Registration/base.html' %}
     {% load static %}
-    {% block title %}Login{% endblock %}
+    {% block title %}Talent Hunt | Login{% endblock %}
     {% block header %}
     <link rel="stylesheet" type="text/css" href="{% static 'Registration\background.css' %}">
     {% endblock %}
     {% block content %}
-        <div class = "bg  container-fluid" >
-            <div class = "row justify-content-center h-100 row align-items-center">
-                <div class = "col-3 text-center">
+        <div class = "bg  container-fluid " >
+            <div class = " row justify-content-around h-100 row align-items-center">
+                <div class="col-5">
+                    <img src="{% static 'Registration/Images/BackGround.png' %}" alt="TH Logo" width=100%>
+                </div>
+                <div class = "col-4 text-center">
                     {% if error %}
                     <span class="alert alert-danger">{{error}}</span>
                     <br>
                     <br>
-                    {% endif %}
-                    <div class = "card-transparent" style="background-color: rgba(4, 4, 4, 0.5);">
-                        <div class = "card-header" style="opacity: 1;">
-                            <img src="{% static 'Registration/Images/TH.png' %}" alt="TH Logo" width=30%>
-                        </div>
+                    {% endif %}    
+                    <div class = "card-transparent" style="background-color: rgba(192, 200, 201, 0.336); " >
+                        <img class="card-img-top" style="width: 8rem;" src="{% static 'Registration/Images/Logo2.png' %}" alt="TH Logo" width=30%>
                         <div class="card-body" >
                             <form action="{% url 'Registration:Login' %}" method="POST">
                                 {% csrf_token %}
@@ -44,13 +45,14 @@
                                     </div>
                                     <input type="password" class="form-control" placeholder="Password" name="password">
                                 </div>
-                                <button type='submit' class='btn btn-primary btn-lg'>Login</button>
+                                <button type='submit' class='btn btn-dark btn-lg'>Login</button>
                             </form>
                         </div>
                         <div class = "card-footer">
                             <form action="{% url 'Registration:SignUp' %}" method='GET'>
-                                <label>Don't have an account? </label>
-                                <button type='submit' class='btn btn-primary'>Sign Up</button>
+                                <label style="color: rgb(25, 25, 26);">Don't have an account? </label>
+                                <br>
+                                <button type='submit' class='btn btn-dark'>Sign Up</button>
                             </form>
                         </div>
                     </div>
