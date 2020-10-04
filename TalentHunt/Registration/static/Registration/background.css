@@ -4,13 +4,14 @@ body, html {
 }
 .bg {
   /* The image used */
-  background-image: url("Images/BG2.png");
-
+  background-image: url("Images/BG1.png");
+  
   /* Full height */
   height: 100%;
 
   /* Center and scale the image nicely */
-  background-position: center;
+  background-position: right top;
   background-repeat: no-repeat;
   background-size: cover;
+  background-attachment: scroll;
 }
