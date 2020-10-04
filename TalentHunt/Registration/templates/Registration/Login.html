@@ -8,7 +8,7 @@
         <div class = "bg  container-fluid " >
             <div class = " row justify-content-around h-100 row align-items-center">
                 <div class="col-5">
-                    <img src="{% static 'Registration/Images/BackGround.png' %}" alt="TH Logo" width=100%>
+                    <img src="{% static 'Registration/Images/Intro.png' %}" alt="TH Logo" width=100%>
                 </div>
                 <div class = "col-4 text-center">
                     {% if error %}
@@ -50,7 +50,7 @@
                         </div>
                         <div class = "card-footer">
                             <form action="{% url 'Registration:SignUp' %}" method='GET'>
-                                <label style="color: rgb(25, 25, 26);">Don't have an account? </label>
+                                <label style="color: floralwhite;"><strong>Don't have an account? </strong></label>
                                 <br>
                                 <button type='submit' class='btn btn-dark'>Sign Up</button>
                             </form>
