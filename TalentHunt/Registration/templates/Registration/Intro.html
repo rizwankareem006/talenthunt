@@ -79,9 +79,18 @@
         </style>
     </head>
     <body>
-        <nav class="navbar navbar-light bg-light" style="background-color: floralwhite;">
-              <img src="{% static 'Registration\Images\Logo1.jpg' %}" width="70" height="70" class="d-inline-block align-top" alt="Talent Hunt Logo">
-          </nav>
+        <nav class="navbar content-justify-around" style="background-color: #F9F3E5;">
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <img src="{% static 'Registration\Images\Logo3.jpg' %}" width="90" height="70" class="d-inline-block align-top" alt="Talent Hunt Logo">
+                    <form action="{% url 'Registration:Login' %}" method='GET'>
+                            <button type='submit' class='btn btn-primary'>Log In</button>
+                    </form>
+                    <form action="{% url 'Registration:SignUp' %}" method='GET'>
+                        <button type='submit' class='btn btn-success'>Sign Up</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
         <div class="slideshow-container">
             <div class="mySlides fade">
                 <img src="{% static 'Registration\Images\BG1.png' %}" style="width:100%">
