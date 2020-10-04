@@ -37,3 +37,6 @@ def loginpage(request):
     else:
         context = {}
     return render(request,'Registration/Login.html', context=context)
+
+def intro(request):
+    return render(request,'Registration/Intro.html')
