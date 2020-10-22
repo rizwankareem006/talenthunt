@@ -5,6 +5,7 @@ from .models import Skills, SkillSet, Teams, TeamDesc, TeamMembers, UserRequests
 from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponseNotFound
 from .datastructure import CardDetails, PageNumber, ProfileDetails, TeamProfile, ProfileTeamList, TeamProfileList, ProfileReqs, TeamReqs, ProfileSendRequest
+from django.db.models import Q
 
 # Create your views here.
 def signout(request):
@@ -237,3 +238,22 @@ def resign(request,team,user):
         t = Teams.objects.get(pk=team)
         Teams.objects.removeMember(t,u)
         return redirect('Details:Profile', username=u.username)
+
+@login_required
+def search(request,page=1):
+        print(request.GET)
+        users = User.objects.filter(Q(first_name__icontains=request.GET["search"])|Q(last_name__icontains=request.GET["search"]))
+        start = 10*(page-1)
+        end = start + 10
+        carddet = []
+        for i in range(start, min(len(users),end)):
+            uobj = users[i]
+            sks = Skills.objects.get(user = uobj)
+            if uobj.username != str(request.user):
+                skset = list(sks.skillset.all())
+                cd = CardDetails(uobj,sks,skset)
+                carddet.append(cd)
+        nop = len(users)//10
+        page_number = PageNumber(page)
+        context = {'page_number':page_number, 'carddet':carddet, 'np':nop}
+        return render(request,'Details/feed.html',context = context)
