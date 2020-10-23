@@ -18,4 +18,5 @@ urlpatterns = [
     path('teammembersuccess/<int:team>/<str:user>/', views.teammembersuccess, name="TeamMemberSuccess"),
     path('teammemberfailure/<int:team>/<str:user>/', views.teammemberfailure, name="TeamMemberFailure"),
     path('resign/<int:team>/<str:user>/', views.resign, name="Resign"),
+    path('feedsearch/<int:page>/', views.search, name="Search"),
 ]
