@@ -9,17 +9,72 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <link rel="icon" type="image/x-icon" href="{% static 'Registration/Images/TH.png' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'Registration/Images/Logo3.png' %}">
+    <style>
+        html,body {
+                font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+                margin:0;
+                padding:0;
+        }
+
+        .navbar {
+            padding: .8rem;
+            background: beige;
+        }
+
+        .navbar-nav li {
+            padding-right: 20px;
+        }
+
+        .nav-btn {
+            background: none !important;
+            border: none;
+        }
+
+        .nav-btn:hover {
+            color: rgb(107, 107, 107);
+        }
+
+        .jumbotron {
+            background-image: url("{% static 'Registration/Images/BackGround5.jpg' %}");
+            background-position: right top;
+            background-repeat: no-repeat;
+            background-size: cover;
+            
+        }
+    </style>
     {% block header %}
 
     {% endblock %}
 </head>
 <body>
-    <a href = "{% url 'Details:Feed' page=1 %}"><h2>{{request.user}}</h2></a>
-    <form action="{% url 'Details:Logout' %}" method = "POST">
-        {% csrf_token %}
-        <button type="submit">Sign Out</button>
-    </form>
+    <nav class="navbar navbar-expand-md navbar-light bg-light sticky-top" >
+        <div class = "container-fluid">
+            <a class="navbar-brand" href="{% url 'Registration:Login' %}">
+                <img src="{% static 'Registration\Images\Logo3.png' %}" width="50" height="25" alt="Talent Hunt Logo">
+                Talent Hunt
+            </a>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <form action="{% url 'Details:Logout' %}" method = "POST">
+                        {% csrf_token %}
+                        <button class="nav-btn" type="submit">Home</button>
+                    </form>
+                </li>
+                <li class="nav-item active">
+                    <form action="{% url 'Details:Profile' username=request.user %}" method="GET">
+                        <button class="nav-btn" type="submit">Profile</button>
+                    </form>
+                </li>
+                <li class="nav-item active">
+                    <form action="{% url 'Details:Logout' %}" method = "POST">
+                        {% csrf_token %}
+                        <button class="nav-btn" type="submit">Sign Out</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </nav>
     {% block content %}
     
     {% endblock %}

@@ -1,32 +1,41 @@
 {% extends 'Details/base.html' %}
 {% load static %}
-{% block title %}Feed{% endblock %}
+{% block title %}Talent Hunt | Feed{% endblock %}
 {% block header%}
+    <style>
+        .card {
+            background: none;
+        }
+    </style>
 {% endblock %}
 {% block content %}
-<form action="{% url 'Details:Profile' username=request.user %}" method="GET">
-    <button type="submit">Profile</button>
-</form>
-{% for item in carddet %}
-    <a href = "{% url 'Details:Profile' username=item.username %}">
-        <button class="card">
-            <div class="card-header">
-                {{ item.fullname }}
-            </div>
-            <div class="card-body">
-                <ul>
-                    {% for i in item.skillset %}
-                        <li>{{ i.description }}</li>
-                    {% endfor %}
-                </ul>
-                {{ item.workexpec }}
-                {{ item.rating }}
-            </div>
-        </button>
-    </a>
-{% endfor %}
-<ul class="pagination">
-    {% if page_number.previousPage != 0 %}<li class="page-item"><a class="page-link" href="{% url 'Details:Feed' page=page_number.previousPage %}">Previous</a></li>{% endif %}
-    <li class="page-item"><a class="page-link" href="{% url 'Details:Feed' page=page_number.nextPage %}">Next</a></li>
-</ul>
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-4">
+                Hello,<br>{{request.user}}
+            </h1>
+        </div>
+    </div>
+    {% for item in carddet %}
+        <a href = "{% url 'Details:Profile' username=item.username %}">
+            <button class="card">
+                <div class="card-header">
+                    {{ item.fullname }}
+                </div>
+                <div class="card-body">
+                    <ul>
+                        {% for i in item.skillset %}
+                            <li>{{ i.description }}</li>
+                        {% endfor %}
+                    </ul>
+                    {{ item.workexpec }}
+                    {{ item.rating }}
+                </div>
+            </button>
+        </a>
+    {% endfor %}
+    <ul class="pagination">
+        {% if page_number.previousPage != 0 %}<li class="page-item"><a class="page-link" href="{% url 'Details:Feed' page=page_number.previousPage %}">Previous</a></li>{% endif %}
+        <li class="page-item"><a class="page-link" href="{% url 'Details:Feed' page=page_number.nextPage %}">Next</a></li>
+    </ul>
 {% endblock %}
