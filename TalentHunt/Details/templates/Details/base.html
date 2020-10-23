@@ -17,9 +17,9 @@
                 padding:0;
         }
 
-        .navbar {
+        #navbar {
             padding: .8rem;
-            background: beige;
+            background: rgba(34, 34, 34, 0.808);
         }
 
         .navbar-nav li {
@@ -39,8 +39,8 @@
             background-image: url("{% static 'Registration/Images/BackGround5.jpg' %}");
             background-position: right top;
             background-repeat: no-repeat;
-            background-size: cover;
-            
+            background-size: contain;
+            background-color: lightgray;
         }
     </style>
     {% block header %}
@@ -75,6 +75,13 @@
             </ul>
         </div>
     </nav>
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-4">
+                Hello,<br>{{request.user}}
+            </h1>
+        </div>
+    </div>
     {% block content %}
     
     {% endblock %}
