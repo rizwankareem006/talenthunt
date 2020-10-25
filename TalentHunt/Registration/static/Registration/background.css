@@ -4,9 +4,8 @@ body, html {
 }
 .bg {
   /* The image used */
-  background-image: url("Images/BG1.png");
+  background-image: url("Images/BackGround2.jpg");
   
-  /* Full height */
   height: 100%;
 
   /* Center and scale the image nicely */
