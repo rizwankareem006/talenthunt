@@ -52,17 +52,12 @@
 <body>
     <nav class="navbar navbar-expand-md navbar-light bg-light sticky-top" >
         <div class = "container-fluid">
-            <a class="navbar-brand" href="{% url 'Registration:Login' %}">
+            <a class="navbar-brand" href="{% url 'Details:Feed' page=1 %}">
                 <img src="{% static 'Registration\Images\Logo3.png' %}" width="50" height="25" alt="Talent Hunt Logo">
                 Talent Hunt
             </a>
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item active">
-                    <form action="{% url 'Details:Logout' %}" method = "POST">
-                        {% csrf_token %}
-                        <button class="nav-btn" type="submit" style="padding: 0.5rem 1.5rem;">Home</button>
-                    </form>
-                </li>
+                
                 <li class="nav-item active" style="padding: 0rem 35rem 0rem 0rem;">
                     <form method="GET" action="{% url 'Details:Search' page=1 %}">
                         <div id="nav-search" class="input-group mb-3">
@@ -79,10 +74,9 @@
                     </form>
                 </li>
                 <li class="nav-item active">
-                    <form action="{% url 'Details:Profile' username=request.user %}" method="GET">
-                        <button class="nav-btn" type="submit">
-                            
-                        </button>
+                    <form action="{% url 'Details:Profile' username=request.user %}" method = "POST">
+                        {% csrf_token %}
+                        <button class="nav-btn" type="submit" style="padding: 0.5rem 1.5rem;">Profile</button>
                     </form>
                 </li>
                 <li class="nav-item dropdown">
