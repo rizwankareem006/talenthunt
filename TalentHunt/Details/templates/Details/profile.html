@@ -8,7 +8,7 @@
     <script type="text/javascript" src="{% static 'Details/skills.js' %}"></script>
     <script>
         $(function(){
-            $("#update").click(function(){
+            $("#update,#update1").click(function(){
                 var arr = [];
                 var len = $(".chip").length;
                 for (var i = 0; i <len ; i++){
@@ -305,14 +305,18 @@
                             <form action="{% url 'Details:CreateTeam' %}" method="GET">
                                 <button id="contact" class="btn btn-warning btn-block" type="submit">Create Team</button>
                             </form>
-                            <div id="status"></div>
+                            
                         </div>
                     </div>
                 </div>
                 <div class="col-md-9 col-sm-9 col-xs-12 pull-right profile-right-section">
-                    {% csrf_token %}
                     <div class="row profile-right-section-row">
                         <div class="col-md-12">
+                            <div class="row">
+                                <div id="status">
+                                
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-md-8">
                                     <ul class="nav nav-tabs" role="tablist">
@@ -343,6 +347,14 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <p><input type="text" id="lastname" value={{pd.lastname}} {% if owner == False %} disabled {% endif %}></p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label>E-mail</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <p><input type="text" id="email" value={{pd.email}} {% if owner == False %} disabled {% endif %}></p>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -381,6 +393,11 @@
                                                 <div class="col-md-6">
                                                     <p><textarea id="bio" {% if owner == False %} disabled {% endif %}>{{pd.bio}}</textarea></p>
                                                 </div>
+                                            </div>
+                                            <div class="row">
+                                                {% if owner == True %}
+                                                    <button class="btn-dark btn-block" type="button" id="update">Update</button>
+                                                {% endif %}
                                             </div>
                                         </div>
                                         <div role="tabpanel" class="tab-pane fade" id="professional">
@@ -439,6 +456,11 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="row">
+                                                {% if owner == True %}
+                                                    <button class="btn-dark btn-block" type="button" id="update1" >Update</button>
+                                                {% endif %}
+                                            </div>
                                         </div>
                                         <div role="tabpanel" class="tab-pane fade" id="teams">
                                             {% csrf_token %}
@@ -453,11 +475,6 @@
                                                     </ul>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            {% if owner == True %}
-                                                <button class="btn-dark btn-block" type="button" id="update">Update</button>
-                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>
