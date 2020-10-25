@@ -8,7 +8,7 @@
     <script type="text/javascript" src="{% static 'Details/skills.js' %}"></script>
     <script>
         $(function(){
-            $("#update").click(function(){
+            $("#update,#update1").click(function(){
                 var arr = [];
                 var len = $(".chip").length;
                 for (var i = 0; i <len ; i++){
@@ -300,23 +300,30 @@
                                 </div>
                             </div>
                             {% endif %}
-                            <br> 
-                            <form action="{% url 'Details:CreateTeam' %}" method="GET">
-                                <button type="button" class="btn btn-warning btn-block" data-toggle="modal" data-target="#exampleModalCenter">
-                                    Create Team
-                                </button>
-                                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLongTitle">Create Team</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
+                            <br>
+                            {% if owner %} 
+                            <button type="button" class="btn btn-warning btn-block" data-toggle="modal" data-target="#exampleModalCenter">
+                                Create Team
+                            </button>
+                            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLongTitle">Create Team</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <form action="{% url 'Details:CreateTeam' %}" method="POST">
+                                        {% csrf_token %}
                                             <div class="modal-body">
-                                                <form action="" method="POST">
-                                                    {% csrf_token %}
+                                                    <div class="row">
+                                                        {% if error %}
+                                                        <div class="alert alert-danger">
+                                                            {{error}}
+                                                        </div>
+                                                        {% endif %}
+                                                    </div>
                                                     <div class="row">
                                                         <div class="col-md-4">
                                                             <label>Team Name</label>
@@ -340,24 +347,28 @@
                                                         <div class="col-md-6">
                                                             <p><textarea id="teammotive" name="teammotive" required></textarea></p>
                                                         </div>
-                                                    </div>
-                                                </form>                                            
+                                                    </div>                                            
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                                 <button type="submit" class="btn btn-primary">Create</button>
                                             </div>
-                                        </div>
+                                        </form>
                                     </div>
                                 </div>
-                            <div id="status"></div>
+                            </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
                 <div class="col-md-9 col-sm-9 col-xs-12 pull-right profile-right-section">
-                    {% csrf_token %}
                     <div class="row profile-right-section-row">
                         <div class="col-md-12">
+                            <div class="row">
+                                <div id="status">
+                                
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-md-8">
                                     <ul class="nav nav-tabs" role="tablist">
@@ -388,6 +399,14 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <p><input type="text" id="lastname" value={{pd.lastname}} {% if owner == False %} disabled {% endif %}></p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label>E-mail</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <p><input type="text" id="email" value={{pd.email}} {% if owner == False %} disabled {% endif %}></p>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -426,6 +445,11 @@
                                                 <div class="col-md-6">
                                                     <p><textarea id="bio" {% if owner == False %} disabled {% endif %}>{{pd.bio}}</textarea></p>
                                                 </div>
+                                            </div>
+                                            <div class="row">
+                                                {% if owner == True %}
+                                                    <button class="btn-dark btn-block" type="button" id="update">Update</button>
+                                                {% endif %}
                                             </div>
                                         </div>
                                         <div role="tabpanel" class="tab-pane fade" id="professional">
@@ -484,6 +508,11 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="row">
+                                                {% if owner == True %}
+                                                    <button class="btn-dark btn-block" type="button" id="update1" >Update</button>
+                                                {% endif %}
+                                            </div>
                                         </div>
                                         <div role="tabpanel" class="tab-pane fade" id="teams">
                                             {% csrf_token %}
@@ -498,11 +527,6 @@
                                                     </ul>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            {% if owner == True %}
-                                                <button class="btn-dark btn-block" type="button" id="update">Update</button>
-                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>
