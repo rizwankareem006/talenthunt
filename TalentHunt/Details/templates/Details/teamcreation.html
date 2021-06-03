@@ -1,21 +1,327 @@
-{% extends 'Details/base.html' %}
-{% load static %}
-{% block title %}Team Creation{% endblock %}
-{% block header %}
-{% endblock %}
-{% block content %}
-<h1>Create Team</h1>
-{% if error %}
-<h3>{{error}}</h3>
-{% endif %}
-<form action="" method="POST">
-    {% csrf_token %}
-    <label for="teamname">Team Name:</label>
-    <input type="text" id="teamname" name="teamname" required>
-    <label for="teamdescription">Team Description:</label>
-    <textarea id="teamdescription" name="teamdescription" required></textarea>
-    <label for="teammotive">Team Motive:</label>
-    <textarea id="teammotive" name="teammotive" required></textarea>
-    <button type="submit">Create</button>
-</form>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Talent Hunt | Home</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <link rel="icon" type="image/x-icon" href='C:\Users\91915\Documents\GitHub\talenthunt2\TalentHunt2\static\images\Logo Initials.png'>
+        <style>
+            html,body {
+                font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+                margin:0;
+                padding:0;
+            }
+
+            #navbar {
+                padding: .8rem;
+               
+                align-self: center;
+                background:transparent;
+                background-color:transparent;
+                border-color:transparent;
+                margin-bottom:0px;
+                font-size:20px;
+            }
+
+            .navbar-nav li {
+                padding-right: 20px;
+            }
+
+            .nav-btn {
+                background: none !important;
+                border: none;
+            }
+
+            .nav-btn:hover {
+                color: rgb(107, 107, 107);
+            }
+
+            #nav-search {
+                width: 15em;
+                height: 1.5em;
+            }
+
+            .right {
+                align-self: flex-end;
+            }
+            
+            .card {
+                width: 100%;
+                color: rgb(37, 35, 35);
+            }
+
+            .card-header {
+                background-color: rgb(99, 99, 99);
+                color: whitesmoke;
+            }
+
+            .card-body {
+                background-color: rgba(211, 211, 211, 0.568);
+            }
+
+            .list-group-item,#list-group {
+                background-color: rgba(211, 211, 211, 0);
+            }
+
+            .page-link {
+                border: none;
+            }
+
+            #icon {
+                color: rgb(46, 46, 46);     
+            }
+
+            .jumbotron {
+                background-color: rgba(0, 0, 0, 0.932);
+                background-position: right top;
+                background-repeat: no-repeat;
+                background-size: contain;
+                color: rgb(185, 255, 21);
+            }
+
+            .card-deck {
+                margin: 0 auto; /* Added */
+                float: none; /* Added */
+                margin-bottom: 10px; /* Added */
+            }
+        </style>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-sm navbar-light bg-light sticky-top" >
+            <div class = "container-fluid">
+                <a class="navbar-brand" href="{% url 'Details:Feed' page=1 %}">
+                    <!--<img src='' width="50" height="25" alt="Talent Hunt Logo">-->
+                    Talent Hunt
+                </a>
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active" style="padding: 0rem 35rem 0rem 0rem;">
+                        <form method="GET" action="{% url 'Details:Search' page=1 %}">
+                            <div id="nav-search" class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Search" name="search">
+                                <div class="input-group-append">
+                                    <button class="btn btn-dark" type="submit">
+                                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
+                                            <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </li>
+                    <li class="nav-item active">
+                        <form action="{% url 'Details:Profile' username=request.user %}" method = "POST">
+                            <!--{% csrf_token %}-->
+                            <button class="nav-btn" type="submit" style="padding: 0.5rem 1.5rem;">Profile</button>
+                        </form>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <div class="right">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <svg id="icon" width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-person-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M13.468 12.37C12.758 11.226 11.195 10 8 10s-4.757 1.225-5.468 2.37A6.987 6.987 0 0 0 8 15a6.987 6.987 0 0 0 5.468-2.63z"/>
+                                    <path fill-rule="evenodd" d="M8 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                                    <path fill-rule="evenodd" d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8z"/>
+                                </svg>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="left: -10rem;">
+                                <a class="dropdown-item">
+                                    <!--{{request.user}}-->
+                                    Abhinaya
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{% url 'Details:Profile' username=request.user %}">Manage your TH account</a>
+                                <a class="dropdown-item" href="{% url 'Details:Logout' %}">Sign out</a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <h1 class="display-4">
+                    Hello,<br><!--{{request.user}}--> Abhinaya
+                </h1>
+            </div>
+        </div>
+        <!--{% for item in carddet %}-->
+        <div class="col d-flex justify-content-center">
+            <div class="card-deck" style="width: 65rem; height: 20rem;">
+                <div class="card">
+                    <img class="card-img-top" src="C:/Users/91915/Desktop/Sem 4/Talent Hunt/Media/Goyal.jpeg" alt="Card image cap">
+                    <div class="card-body">
+                        <h4 class="card-title">Kshitiz Goyal</h4>
+                        <svg id="icon" width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-star-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.283.95l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                        </svg>
+                        9.5<!--{{ item.rating }}-->
+                    </div>
+                    <div class="card-footer">
+                        <p class="card-text">
+                            <h5>Skills</h5>
+                            <ul>
+                                <li>Communication Skills</li>
+                                <li>Problem Solving Skills</li>
+                                <li>People Skills</li>
+                            </ul>
+                        </p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img class="card-img-top" src="C:/Users/91915/Desktop/Sem 4/Talent Hunt/Media/Riz.png" alt="Card image cap">
+                    <div class="card-body">
+                        <h4 class="card-title">Rizwan Kareem</h4>
+                        <svg id="icon" width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-star-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.283.95l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                        </svg>
+                        9.0<!--{{ item.rating }}-->
+                    </div>
+                    <div class="card-footer">
+                        <p class="card-text">
+                            <h5>Skills</h5>
+                            <ul>
+                                <li>Leadership Skills</li>
+                                <li>Programming Skills</li>
+                                <li>Time Management Skills</li>
+                            </ul>
+                        </p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img class="card-img-top" src="C:/Users/91915/Desktop/Sem 4/Talent Hunt/Media/Jaanu.jpg" alt="Card image cap">
+                    <div class="card-body">
+                        <h4 class="card-title">Janani B</h4>
+                        <svg id="icon" width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-star-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.283.95l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                        </svg>
+                        8.5<!--{{ item.rating }}-->
+                    </div>
+                    <div class="card-footer">
+                        <p class="card-text">
+                            <h5>Skills</h5>
+                            <ul>
+                                <li>Collaboration Skills</li>
+                                <li>Computer Skills</li>
+                                <li>Organizational Skills</li>
+                            </ul>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+<br><br> <br><br><br><br><br><br><br><br>
+        <div class="col d-flex justify-content-center">
+            <div class="card-deck" style="width: 65rem; height: 20rem;">
+                <div class="card">
+                    <img class="card-img-top" src="C:/Users/91915/Desktop/Sem 4/Talent Hunt/Media/Logo.png" alt="Card image cap">
+                    <div class="card-body">
+                        <h4 class="card-title">Talent Hunt</h4>
+                    </div>
+                    <div class="card-footer">
+                        <p class="card-text">
+                            <h5>Motive</h5>
+                            <br>spring
+                        </p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img class="card-img-top" src="C:/Users/91915/Desktop/Sem 4/Talent Hunt/Media/a.jpg" alt="Card image cap">
+                    <div class="card-body">
+                        <h4 class="card-title">Alpha</h4>
+                    </div>
+                    <div class="card-footer">
+                        <p class="card-text">
+                            <h5>Motive</h5>
+                            <br>spring
+                        </p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img class="card-img-top" src="C:/Users/91915/Desktop/Sem 4/Talent Hunt/Media/a.jpg" alt="Card image cap">
+                    <div class="card-body">
+                        <h4 class="card-title">Alpha</h4>
+                    </div>
+                    <div class="card-footer">
+                        <p class="card-text">
+                            <h5>Motive</h5>
+                            <br>spring
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+            <!--<div class="col-sm-6">
+                <a class="card-link" href = "{% url 'Details:Profile' username=item.username %}">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>
+                                {{ item.fullname }}
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <ul id="list-group" class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <ul>
+                                        {% for i in item.skillset %}
+                                            <li>{{ i.description }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                                <li class="list-group-item">{{ item.workexpec }}</li>
+                                <li class="list-group-item">
+                                    <svg id="icon" width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-star-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.283.95l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                                    </svg>
+                                    {{ item.rating }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <br>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+        <div class="row justify-content-around h-100 row align-items-around">
+            <ul class="pagination";>
+                {% if page_number.previousPage != 0 %}
+                    <li class="page-item">
+                        <a class="page-link" href="{% url 'Details:Feed' page=page_number.previousPage %}">
+                            <svg id="icon" width="5em" height="3em" viewBox="0 0 16 16" class="bi bi-caret-left-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                                <path fill-rule="evenodd" d="M10.205 12.456A.5.5 0 0 0 10.5 12V4a.5.5 0 0 0-.832-.374l-4.5 4a.5.5 0 0 0 0 .748l4.5 4a.5.5 0 0 0 .537.082z"/>
+                            </svg>
+                        </a>
+                    </li>
+                {% endif %}
+                {% if page_number.previousPage == 0 %}
+                    <li class="page-item">
+                        <button class="page-link" href="{% url 'Details:Feed' page=page_number.previousPage %}" aria-disabled="true">
+                            <svg id="icon" width="5em" height="3em" viewBox="0 0 16 16" class="bi bi-caret-left-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                                <path fill-rule="evenodd" d="M10.205 12.456A.5.5 0 0 0 10.5 12V4a.5.5 0 0 0-.832-.374l-4.5 4a.5.5 0 0 0 0 .748l4.5 4a.5.5 0 0 0 .537.082z"/>
+                            </svg>
+                        </button>
+                    </li>
+                {% endif %}
+                <li class="page-item">
+                    <a class="page-link" href="{% url 'Details:Feed' page=page_number.nextPage %}">
+                        <svg id="icon" width="5em" height="3em" viewBox="0 0 16 16" class="bi bi-caret-right-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                            <path fill-rule="evenodd" d="M5.795 12.456A.5.5 0 0 1 5.5 12V4a.5.5 0 0 1 .832-.374l4.5 4a.5.5 0 0 1 0 .748l-4.5 4a.5.5 0 0 1-.537.082z"/>
+                        </svg>
+                    </a>
+                </li>
+            </ul>
+        </div>-->
+        <br>
+        <br>
+        
+    </body>
+</html>
